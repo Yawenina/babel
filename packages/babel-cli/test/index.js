@@ -4,18 +4,18 @@ import rimraf from "rimraf";
 import { sync as makeDirSync } from "make-dir";
 import child from "child_process";
 import escapeRegExp from "lodash/escapeRegExp";
-import merge from "lodash/merge";
+// import merge from "lodash/merge";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
-import { chmod } from "../lib/babel/util";
+// import { chmod } from "../lib/babel/util";
 
-const require = createRequire(import.meta.url);
+// const require = createRequire(import.meta.url);
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const fixtureLoc = path.join(dirname, "fixtures");
+// const fixtureLoc = path.join(dirname, "fixtures");
 const tmpLoc = path.join(dirname, "tmp");
 const rootDir = path.resolve(dirname, "../../..");
 
@@ -188,113 +188,152 @@ const buildTest = function (binName, testName, opts) {
   };
 };
 
-fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName.startsWith(".")) return;
+// fs.readdirSync(fixtureLoc).forEach(function (binName) {
+//   if (binName.startsWith(".")) return;
 
-  const suiteLoc = path.join(fixtureLoc, binName);
-  describe("bin/" + binName, function () {
-    let cwd;
+//   const suiteLoc = path.join(fixtureLoc, binName);
+//   describe("bin/" + binName, function () {
+//     let cwd;
 
-    beforeEach(() => {
-      cwd = process.cwd();
+//     beforeEach(() => {
+//       cwd = process.cwd();
 
-      if (fs.existsSync(tmpLoc)) {
-        for (const child of fs.readdirSync(tmpLoc)) {
-          rimraf.sync(path.join(tmpLoc, child));
-        }
-      } else {
-        fs.mkdirSync(tmpLoc);
+//       if (fs.existsSync(tmpLoc)) {
+//         for (const child of fs.readdirSync(tmpLoc)) {
+//           rimraf.sync(path.join(tmpLoc, child));
+//         }
+//       } else {
+//         fs.mkdirSync(tmpLoc);
+//       }
+
+//       process.chdir(tmpLoc);
+//     });
+
+//     afterEach(() => {
+//       process.chdir(cwd);
+//     });
+
+//     fs.readdirSync(suiteLoc).forEach(function (testName) {
+//       if (testName.startsWith(".")) return;
+
+//       const testLoc = path.join(suiteLoc, testName);
+
+//       const opts = {
+//         args: [],
+//       };
+
+//       const optionsLoc = path.join(testLoc, "options.json");
+//       if (fs.existsSync(optionsLoc)) {
+//         const taskOpts = require(optionsLoc);
+//         if (taskOpts.os) {
+//           let os = taskOpts.os;
+
+//           if (!Array.isArray(os) && typeof os !== "string") {
+//             throw new Error(
+//               `'os' should be either string or string array: ${taskOpts.os}`,
+//             );
+//           }
+
+//           if (typeof os === "string") {
+//             os = [os];
+//           }
+
+//           if (!os.includes(process.platform)) {
+//             return;
+//           }
+
+//           delete taskOpts.os;
+//         }
+//         merge(opts, taskOpts);
+//       }
+
+//       ["stdout", "stdin", "stderr"].forEach(function (key) {
+//         const loc = path.join(testLoc, key + ".txt");
+//         opts[key + "Path"] = loc;
+//         if (fs.existsSync(loc)) {
+//           opts[key] = helper.readFile(loc);
+//         } else {
+//           opts[key] = opts[key] || "";
+//         }
+//       });
+
+//       opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
+//       opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
+
+//       const babelrcLoc = path.join(testLoc, ".babelrc");
+//       const babelIgnoreLoc = path.join(testLoc, ".babelignore");
+//       if (fs.existsSync(babelrcLoc)) {
+//         // copy .babelrc file to tmp directory
+//         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+//         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+//       }
+//       if (fs.existsSync(babelIgnoreLoc)) {
+//         // copy .babelignore file to tmp directory
+//         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+//       }
+//       it(testName, buildTest(binName, testName, opts), 20000);
+//     });
+//   });
+// });
+
+// describe("util.js", () => {
+//   describe("chmod", () => {
+//     it("should warn the user if chmod fails", () => {
+//       const spyConsoleWarn = jest
+//         .spyOn(console, "warn")
+//         .mockImplementation(() => {});
+
+//       // The first argument should be a string.
+//       // The real reason chmod will fail is due to wrong permissions,
+//       // but this is enough to cause a failure.
+//       chmod(100, "file.js");
+
+//       expect(spyConsoleWarn).toHaveBeenCalledTimes(1);
+//       expect(spyConsoleWarn).toHaveBeenCalledWith(
+//         "Cannot change permissions of file.js",
+//       );
+
+//       spyConsoleWarn.mockRestore();
+//     });
+//   });
+// });
+
+describe("zhiyi test", () => {
+  let cwd;
+
+  beforeEach(() => {
+    cwd = process.cwd();
+
+    if (fs.existsSync(tmpLoc)) {
+      for (const child of fs.readdirSync(tmpLoc)) {
+        rimraf.sync(path.join(tmpLoc, child));
       }
+    } else {
+      fs.mkdirSync(tmpLoc);
+    }
 
-      process.chdir(tmpLoc);
-    });
-
-    afterEach(() => {
-      process.chdir(cwd);
-    });
-
-    fs.readdirSync(suiteLoc).forEach(function (testName) {
-      if (testName.startsWith(".")) return;
-
-      const testLoc = path.join(suiteLoc, testName);
-
-      const opts = {
-        args: [],
-      };
-
-      const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) {
-        const taskOpts = require(optionsLoc);
-        if (taskOpts.os) {
-          let os = taskOpts.os;
-
-          if (!Array.isArray(os) && typeof os !== "string") {
-            throw new Error(
-              `'os' should be either string or string array: ${taskOpts.os}`,
-            );
-          }
-
-          if (typeof os === "string") {
-            os = [os];
-          }
-
-          if (!os.includes(process.platform)) {
-            return;
-          }
-
-          delete taskOpts.os;
-        }
-        merge(opts, taskOpts);
-      }
-
-      ["stdout", "stdin", "stderr"].forEach(function (key) {
-        const loc = path.join(testLoc, key + ".txt");
-        opts[key + "Path"] = loc;
-        if (fs.existsSync(loc)) {
-          opts[key] = helper.readFile(loc);
-        } else {
-          opts[key] = opts[key] || "";
-        }
-      });
-
-      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
-      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
-
-      const babelrcLoc = path.join(testLoc, ".babelrc");
-      const babelIgnoreLoc = path.join(testLoc, ".babelignore");
-      if (fs.existsSync(babelrcLoc)) {
-        // copy .babelrc file to tmp directory
-        opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
-        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
-      }
-      if (fs.existsSync(babelIgnoreLoc)) {
-        // copy .babelignore file to tmp directory
-        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
-      }
-
-      it(testName, buildTest(binName, testName, opts), 20000);
-    });
+    process.chdir(tmpLoc);
   });
-});
 
-describe("util.js", () => {
-  describe("chmod", () => {
-    it("should warn the user if chmod fails", () => {
-      const spyConsoleWarn = jest
-        .spyOn(console, "warn")
-        .mockImplementation(() => {});
-
-      // The first argument should be a string.
-      // The real reason chmod will fail is due to wrong permissions,
-      // but this is enough to cause a failure.
-      chmod(100, "file.js");
-
-      expect(spyConsoleWarn).toHaveBeenCalledTimes(1);
-      expect(spyConsoleWarn).toHaveBeenCalledWith(
-        "Cannot change permissions of file.js",
-      );
-
-      spyConsoleWarn.mockRestore();
-    });
+  afterEach(() => {
+    process.chdir(cwd);
   });
+
+  it('filename --out-file', buildTest('babel', 'filename --out-file', {
+    args: [
+      "script.js", "--out-file", "script2.js"
+    ],
+    stdoutPath: "/Users/yawenina/Codes/github/babel/packages/babel-cli/test/fixtures/babel/filename --out-file/stdout.txt",
+    stdout: "",
+    stdinPath: "/Users/yawenina/Codes/github/babel/packages/babel-cli/test/fixtures/babel/filename --out-file/stdin.txt",
+    stdin: "",
+    stderrPath: "/Users/yawenina/Codes/github/babel/packages/babel-cli/test/fixtures/babel/filename --out-file/stderr.txt",
+    stderr: "",
+    outFiles: {
+      "script2.js": "\"use strict\";\n\narr.map(function (x) {\n  return x * MULTIPLIER;\n});",
+    },
+    inFiles: {
+      "script.js": "arr.map(x => x * MULTIPLIER);",
+    },
+  }), 20000)
 });

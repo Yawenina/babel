@@ -11,6 +11,7 @@
     "fix": "make fix",
     "lint": "make lint",
     "test": "make test",
+    "test:babel-cli": "TEST_ONLY=babel-cli TEST_GREP='dir --out-dir' make test-only",
     "version": "yarn --immutable-cache && git add yarn.lock",
     "test:esm": "node test/esm/index.js",
     "test:runtime:generate-absolute-runtime": "node test/runtime-integration/generate-absolute-runtime.cjs",
